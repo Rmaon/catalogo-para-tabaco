@@ -21,12 +21,20 @@ Esta carpeta contiene una PWA. Para instalarla en iPad debe estar servida desde 
 - Usa «Copias de seguridad» y exporta un JSON de vez en cuando. Guarda esa copia en Archivos/iCloud Drive.
 - Para restaurar, pulsa «Importar copia» y selecciona el JSON.
 - En «Catálogo y diseño» ves las páginas tal y como saldrán en el PDF. Pulsa «Personalizar diseño» (en iPad horizontal el panel aparece siempre a la izquierda) para cambiar:
+  - Plantilla: «Revista» (3 sabores por página, foto grande; es la predeterminada), «Escaparate» (3 por página en horizontal), «Fichas» (3 por página), «Lista» (6 por página) o «Cuadrícula» (9 por página). En «Mis diseños» puedes guardar tus combinaciones y recuperarlas con un toque.
   - Textos: título, subtítulo, pie de página y logotipo.
   - Página: papel (A4, A5, Carta), orientación, márgenes, encabezado, numeración y portada (de color, clara o con mosaico de fotos).
   - Distribución: columnas, filas por página, separación, orden y agrupación por marca (con título o cada marca en página nueva).
   - Tarjetas: foto arriba o a la izquierda, estilo, tamaño y ajuste de la foto, alineación y redondeo.
   - Contenido: qué datos se muestran (foto, marca, descripción, formato, referencia, precio, «Novedad»).
-  - Colores y tipografía: temas predefinidos, colores, tipos de letra y tamaño del texto.
+  - Decoración: fondo decorativo (humo, burbujas, ondas, puntos, rayas, degradado) y su intensidad, encabezado con banda de color, clásico o centrado, marco de página, imagen de fondo propia y un color para cada sabor.
+  - Efectos de las fotos: fondo de color o transparente, sombra (suave, marcada, resplandor, desplazada), filtros (vivo, cálido, frío, vintage, sepia, blanco y negro), inclinación y marco blanco.
+  - Colores: temas predefinidos, colores sueltos y fondo de página liso o en degradado.
+  - Tipografía: letra distinta para el título, los nombres y el texto (del iPad, Google Fonts o tus propios archivos .ttf/.otf/.woff), tamaños, grosor, espaciado, color de los nombres y efectos del título (sombra, degradado, contorno, relieve).
+- Las fotos PNG con fondo transparente conservan la transparencia. Elige «Fondo detrás de la foto: Transparente» para que el paquete aparezca recortado sobre la tarjeta.
+- Toca un sabor en la vista previa para editarlo; toca el título para cambiar los textos. Cada producto puede llevar una «Etiqueta propia» (p. ej. «Top ventas»).
+- Las Google Fonts necesitan internet la primera vez que se eligen; después funcionan sin conexión.
+- Cada sabor toma automáticamente un color de su foto; al editar el producto puedes elegirlo a mano en «Color del sabor».
 - En «Productos» puedes buscar, reordenar con ↑ ↓ (orden «Manual»), ocultar productos del catálogo sin borrarlos y marcarlos como novedad.
 - Pulsa «Crear PDF»; en la hoja de impresión del iPad usa Compartir → «Guardar en Archivos» para conservar el PDF. Si salen páginas cortadas o en blanco, sube «Margen de impresora» en el apartado Impresión.
 - Al publicar una versión nueva, cambia el número de `CACHE` en `sw.js` para que el iPad descargue los archivos actualizados (se aplican al abrir la app por segunda vez).

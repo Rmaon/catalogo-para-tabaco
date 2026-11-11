@@ -24,16 +24,22 @@
 
 <section id="catalogo">
 <div class="toolbar">
-<span id="stats" class="hint"></span>
+<span class="hint"><span id="stats"></span><br>Toca un sabor de la vista previa para editarlo.</span>
 <button class="ghost" id="toggleDesign">Personalizar diseño</button>
 </div>
 <div class="catalog-layout">
 <aside id="designPanel" class="panel design">
 
+<label>Plantilla</label>
+<div class="templates" id="templates"></div>
+<label>Colores</label>
 <div class="presets" id="presets"></div>
+<label>Mis diseños</label>
+<div class="chips" id="myDesigns"></div>
+<button class="ghost small" id="saveDesign">＋ Guardar el diseño actual</button>
 
-<details open><summary>Textos</summary>
-<div class="field"><label>Título</label><input data-set="title"></div>
+<details open id="textsSection"><summary>Textos</summary>
+<div class="field"><label>Título</label><input data-set="title" id="titleInput"></div>
 <div class="field"><label>Subtítulo</label><input data-set="subtitle"></div>
 <div class="field"><label>Pie de página (contacto, web, teléfono…)</label><input data-set="footerText" placeholder="Ej.: pedidos@tienda.com · 600 000 000"></div>
 <div class="field"><label>Logotipo</label>
@@ -58,8 +64,8 @@
 
 <details open><summary>Distribución</summary>
 <div class="grid2">
-<div class="field"><label>Columnas</label><select data-set="cols"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
-<div class="field"><label>Filas por página</label><select data-set="rows"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div>
+<div class="field grid-only"><label>Columnas</label><select data-set="cols"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+<div class="field"><label><span class="grid-only">Filas por página</span><span class="feature-only">Sabores por página</span></label><select data-set="rows"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div>
 </div>
 <div class="field"><label>Separación entre tarjetas <output data-out="gap"></output> mm</label><input type="range" min="0" max="12" step="1" data-set="gap"></div>
 <div class="grid2">
@@ -70,13 +76,22 @@
 
 <details><summary>Tarjetas</summary>
 <div class="grid2">
-<div class="field"><label>Disposición</label><select data-set="layout"><option value="vertical">Foto arriba</option><option value="horizontal">Foto a la izquierda</option></select></div>
-<div class="field"><label>Estilo</label><select data-set="cardStyle"><option value="border">Con borde</option><option value="shadow">Con sombra</option><option value="flat">Fondo suave</option><option value="accent">Línea de color</option><option value="none">Sin marco</option></select></div>
+<div class="field"><label>Disposición</label><select data-set="layout"><option value="feature">Revista (sabor grande)</option><option value="vertical">Foto arriba</option><option value="horizontal">Foto a la izquierda</option></select></div>
+<div class="field"><label>Estilo</label><select data-set="cardStyle"><option value="tint">Tinte del sabor</option><option value="gradient">Degradado del sabor</option><option value="outline">Contorno de color</option><option value="glass">Cristal translúcido</option><option value="border">Con borde</option><option value="shadow">Con sombra</option><option value="flat">Fondo suave</option><option value="accent">Línea de color</option><option value="none">Sin marco</option></select></div>
 </div>
 <div class="field"><label>Tamaño de la foto <output data-out="photoSize"></output> %</label><input type="range" min="30" max="80" step="1" data-set="photoSize"></div>
 <div class="grid2">
 <div class="field"><label>Ajuste de la foto</label><select data-set="imageFit"><option value="contain">Completa</option><option value="cover">Rellenar (recorta)</option></select></div>
 <div class="field"><label>Alineación del texto</label><select data-set="align"><option value="left">Izquierda</option><option value="center">Centrado</option></select></div>
+</div>
+<div class="grid2">
+<div class="field"><label>Forma de la foto</label><select data-set="photoShape"><option value="rounded">Rectángulo</option><option value="circle">Círculo</option><option value="arch">Arco</option><option value="blob">Orgánica</option></select></div>
+<div class="field"><label>Etiqueta de novedad</label><select data-set="badgeStyle"><option value="pill">Píldora</option><option value="seal">Sello redondo</option></select></div>
+</div>
+<div class="checks feature-only">
+<label class="check"><input type="checkbox" data-set="photoDeco"> Formas detrás de la foto</label>
+<label class="check"><input type="checkbox" data-set="alternate"> Alternar lados</label>
+<label class="check"><input type="checkbox" data-set="showNumbers"> Numerar (01, 02…)</label>
 </div>
 <div class="field"><label>Redondeo de esquinas <output data-out="radius"></output> mm</label><input type="range" min="0" max="8" step="0.5" data-set="radius"></div>
 </details>
@@ -89,24 +104,72 @@
 <label class="check"><input type="checkbox" data-set="showFormat"> Formato</label>
 <label class="check"><input type="checkbox" data-set="showRefs"> Referencia</label>
 <label class="check"><input type="checkbox" data-set="showPrice"> Precio</label>
-<label class="check"><input type="checkbox" data-set="showBadge"> Etiqueta «Novedad»</label>
+<label class="check"><input type="checkbox" data-set="showBadge"> Etiqueta de novedad</label>
 <label class="check"><input type="checkbox" data-set="upperName"> Nombre en mayúsculas</label>
 </div>
+<div class="field"><label>Texto de la etiqueta</label><input data-set="badgeText" placeholder="Novedad"></div>
 </details>
 
-<details><summary>Colores y tipografía</summary>
+<details open><summary>Decoración</summary>
+<div class="grid2">
+<div class="field"><label>Fondo decorativo</label><select data-set="decoration"><option value="none">Ninguno</option><option value="smoke">Humo</option><option value="circles">Burbujas</option><option value="waves">Ondas</option><option value="dots">Puntos</option><option value="stripes">Rayas</option><option value="gradient">Degradado</option><option value="sparkles">Destellos</option><option value="hex">Panal</option></select></div>
+<div class="field"><label>Intensidad <output data-out="decoOpacity"></output> %</label><input type="range" min="15" max="100" step="5" data-set="decoOpacity"></div>
+</div>
+<div class="grid2">
+<div class="field"><label>Encabezado</label><select data-set="headerStyle"><option value="band">Banda de color</option><option value="classic">Clásico</option><option value="center">Centrado</option></select></div>
+<div class="field"><label>Marco de página</label><select data-set="frame"><option value="none">Sin marco</option><option value="line">Línea fina</option><option value="double">Doble línea</option><option value="corners">Esquinas</option></select></div>
+</div>
+<label class="check"><input type="checkbox" data-set="flavorColors"> Un color para cada sabor</label>
+<p class="hint">Se toma de la foto automáticamente; puedes elegirlo a mano al editar el producto.</p>
+<div class="field"><label>Imagen de fondo (textura, foto…)</label>
+<div class="logo-row"><img id="bgPreview" alt=""><button class="secondary" id="bgBtn">Elegir imagen</button><button class="danger" id="bgRemove">Quitar</button></div>
+<input id="bgFile" type="file" accept="image/*" hidden></div>
+<div class="field"><label>Transparencia de la imagen <output data-out="bgOpacity"></output> %</label><input type="range" min="5" max="100" step="5" data-set="bgOpacity"></div>
+</details>
+
+<details><summary>Efectos de las fotos</summary>
+<div class="grid2">
+<div class="field"><label>Fondo detrás de la foto</label><select data-set="photoBg"><option value="color">De color</option><option value="none">Transparente (para PNG recortados)</option></select></div>
+<div class="field"><label>Sombra</label><select data-set="photoShadow"><option value="none">Sin sombra</option><option value="soft">Suave</option><option value="strong">Marcada</option><option value="glow">Resplandor del sabor</option><option value="long">Sombra de color desplazada</option></select></div>
+<div class="field"><label>Filtro</label><select data-set="photoFilter"><option value="none">Original</option><option value="vivid">Colores vivos</option><option value="warm">Cálido</option><option value="cool">Frío</option><option value="vintage">Vintage</option><option value="sepia">Sepia</option><option value="bw">Blanco y negro</option></select></div>
+<div class="field"><label>Inclinación <output data-out="photoTilt"></output>°</label><input type="range" min="0" max="12" step="1" data-set="photoTilt"></div>
+</div>
+<label class="check"><input type="checkbox" data-set="photoRing"> Marco blanco alrededor de la foto</label>
+<p class="hint">Para que un sabor «flote» sin fondo, sube su foto como PNG con fondo transparente y elige «Transparente».</p>
+</details>
+
+<details><summary>Colores</summary>
 <div class="grid2">
 <div class="field"><label>Color principal</label><input type="color" data-set="accent"></div>
 <div class="field"><label>Color del texto</label><input type="color" data-set="textColor"></div>
 <div class="field"><label>Fondo de página</label><input type="color" data-set="pageBg"></div>
 <div class="field"><label>Fondo de tarjeta</label><input type="color" data-set="cardBg"></div>
 <div class="field"><label>Fondo de la foto</label><input type="color" data-set="imageBg"></div>
+<div class="field"><label>Tipo de fondo de página</label><select data-set="pageBgMode"><option value="solid">Liso</option><option value="gradient">Degradado</option></select></div>
+<div class="field pg-only"><label>Segundo color del degradado</label><input type="color" data-set="pageBg2"></div>
 </div>
+</details>
+
+<details><summary>Tipografía</summary>
+<div class="field"><label>Título del catálogo</label><select data-set="titleFont" class="fontsel"></select></div>
 <div class="grid2">
-<div class="field"><label>Letra de títulos</label><select data-set="headingFont" class="fontsel"></select></div>
-<div class="field"><label>Letra del texto</label><select data-set="bodyFont" class="fontsel"></select></div>
+<div class="field"><label>Nombres de los sabores</label><select data-set="headingFont" class="fontsel"></select></div>
+<div class="field"><label>Texto</label><select data-set="bodyFont" class="fontsel"></select></div>
 </div>
-<div class="field"><label>Tamaño del texto <output data-out="fontScale"></output> %</label><input type="range" min="70" max="140" step="5" data-set="fontScale"></div>
+<div class="field"><label>Tamaño general <output data-out="fontScale"></output> %</label><input type="range" min="70" max="140" step="5" data-set="fontScale"></div>
+<div class="grid2">
+<div class="field"><label>Tamaño del título <output data-out="titleScale"></output> %</label><input type="range" min="60" max="160" step="5" data-set="titleScale"></div>
+<div class="field"><label>Tamaño de los nombres <output data-out="nameScale"></output> %</label><input type="range" min="60" max="160" step="5" data-set="nameScale"></div>
+<div class="field"><label>Grosor de los nombres</label><select data-set="nameWeight"><option value="400">Normal</option><option value="600">Seminegrita</option><option value="800">Negrita</option><option value="900">Extra negrita</option></select></div>
+<div class="field"><label>Espaciado de letras <output data-out="nameSpacing"></output></label><input type="range" min="-4" max="20" step="1" data-set="nameSpacing"></div>
+<div class="field"><label>Color de los nombres</label><select data-set="nameColor"><option value="text">Color del texto</option><option value="flavor">Color de cada sabor</option><option value="accent">Color principal</option></select></div>
+<div class="field"><label>Efecto del título</label><select data-set="titleEffect"><option value="none">Ninguno</option><option value="shadow">Sombra</option><option value="gradient">Degradado</option><option value="outline">Contorno</option><option value="pop">Relieve de color</option></select></div>
+</div>
+<div class="field"><label>Mis tipografías</label>
+<div class="chips" id="myFonts"></div>
+<button class="ghost small" id="fontBtn">＋ Subir tipografía (.ttf, .otf, .woff)</button>
+<input id="fontFile" type="file" accept=".ttf,.otf,.woff,.woff2,font/*" hidden></div>
+<p class="hint">Las del iPad funcionan siempre sin conexión. Las de Google necesitan internet la primera vez que se eligen; después quedan guardadas.</p>
 </details>
 
 <details><summary>Impresión</summary>
@@ -128,6 +191,10 @@
 <datalist id="brandList"></datalist>
 <div class="field"><label>Descripción</label><textarea id="desc" placeholder="Descripción del sabor"></textarea></div>
 <div class="grid3"><div class="field"><label>Formato</label><input id="pack" placeholder="10 × 50 g"></div><div class="field"><label>Referencia</label><input id="ref" placeholder="Referencia"></div><div class="field"><label>Precio</label><input id="price" placeholder="Ej.: 12,50 €"></div></div>
+<div class="field"><label>Color del sabor</label>
+<div class="color-row"><label class="check"><input type="checkbox" id="useColor"> Elegir a mano</label><input type="color" id="pcolor"></div>
+<p class="hint">Si no lo eliges, se toma automáticamente de la foto.</p></div>
+<div class="field"><label>Etiqueta propia (opcional)</label><input id="tag" placeholder="Ej.: Top ventas, Edición limitada, Helado ❄️"></div>
 <div class="checks"><label class="check"><input type="checkbox" id="isNew"> Marcar como novedad</label><label class="check"><input type="checkbox" id="isHidden"> No mostrar en el catálogo</label></div>
 <div class="field"><label>Fotografía del paquete</label>
 <div class="photo-row"><img id="photoPreview" alt=""><div><input id="photo" type="file" accept="image/*"><button class="danger hidden" id="photoRemove">Quitar foto</button></div></div></div>
