@@ -1,0 +1,10 @@
+{
+  "name": "Mi catálogo de cachimba",
+  "short_name": "Mi Catálogo",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f3f7",
+  "theme_color": "#241d30",
+  "description": "Gestor privado de catálogo de productos"
+}

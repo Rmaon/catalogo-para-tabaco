@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#241d30">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mi Catálogo">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Mi catálogo de cachimba</title>
+<link rel="stylesheet" href="styles.css">
+<style id="pageRule"></style>
+</head>
+<body>
+<header class="appbar"><h1>Mi catálogo de cachimba</h1><p>Gestor de productos · funciona también sin conexión</p></header>
+<main>
+<nav class="tabs">
+<button class="tab active" data-tab="catalogo">Catálogo y diseño</button>
+<button class="tab" data-tab="productos">Productos</button>
+<button class="tab" data-tab="datos">Copias de seguridad</button>
+</nav>
+
+<section id="catalogo">
+<div class="toolbar">
+<span id="stats" class="hint"></span>
+<button class="ghost" id="toggleDesign">Personalizar diseño</button>
+</div>
+<div class="catalog-layout">
+<aside id="designPanel" class="panel design">
+
+<div class="presets" id="presets"></div>
+
+<details open><summary>Textos</summary>
+<div class="field"><label>Título</label><input data-set="title"></div>
+<div class="field"><label>Subtítulo</label><input data-set="subtitle"></div>
+<div class="field"><label>Pie de página (contacto, web, teléfono…)</label><input data-set="footerText" placeholder="Ej.: pedidos@tienda.com · 600 000 000"></div>
+<div class="field"><label>Logotipo</label>
+<div class="logo-row"><img id="logoPreview" alt=""><button class="secondary" id="logoBtn">Elegir logotipo</button><button class="danger" id="logoRemove">Quitar</button></div>
+<input id="logoFile" type="file" accept="image/*" hidden></div>
+</details>
+
+<details open><summary>Página</summary>
+<div class="grid2">
+<div class="field"><label>Tamaño de papel</label><select data-set="paper"><option value="A4">A4</option><option value="A5">A5</option><option value="Carta">Carta</option></select></div>
+<div class="field"><label>Orientación</label><select data-set="orientation"><option value="portrait">Vertical</option><option value="landscape">Horizontal</option></select></div>
+</div>
+<div class="grid2">
+<div class="field"><label>Encabezado</label><select data-set="header"><option value="all">En todas las páginas</option><option value="first">Solo en la primera</option><option value="none">Sin encabezado</option></select></div>
+<div class="field"><label>Márgenes <output data-out="margin"></output> mm</label><input type="range" min="4" max="25" step="1" data-set="margin"></div>
+</div>
+<label class="check"><input type="checkbox" data-set="pageNumbers"> Numerar páginas</label>
+<label class="check"><input type="checkbox" data-set="cover"> Añadir portada</label>
+<div class="field cover-only"><label>Texto de portada (edición, temporada…)</label><input data-set="edition" placeholder="Ej.: Novedades otoño 2026"></div>
+<div class="field cover-only"><label>Estilo de portada</label><select data-set="coverStyle"><option value="solid">Fondo de color</option><option value="light">Fondo claro</option><option value="photos">Mosaico de fotos</option></select></div>
+</details>
+
+<details open><summary>Distribución</summary>
+<div class="grid2">
+<div class="field"><label>Columnas</label><select data-set="cols"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+<div class="field"><label>Filas por página</label><select data-set="rows"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div>
+</div>
+<div class="field"><label>Separación entre tarjetas <output data-out="gap"></output> mm</label><input type="range" min="0" max="12" step="1" data-set="gap"></div>
+<div class="grid2">
+<div class="field"><label>Orden</label><select data-set="sort"><option value="manual">Manual (pestaña Productos)</option><option value="brand">Marca y nombre</option><option value="name">Nombre</option></select></div>
+<div class="field"><label>Agrupar</label><select data-set="groupByBrand"><option value="no">Sin agrupar</option><option value="yes">Por marca, con título</option><option value="page">Por marca, cada una en página nueva</option></select></div>
+</div>
+</details>
+
+<details><summary>Tarjetas</summary>
+<div class="grid2">
+<div class="field"><label>Disposición</label><select data-set="layout"><option value="vertical">Foto arriba</option><option value="horizontal">Foto a la izquierda</option></select></div>
+<div class="field"><label>Estilo</label><select data-set="cardStyle"><option value="border">Con borde</option><option value="shadow">Con sombra</option><option value="flat">Fondo suave</option><option value="accent">Línea de color</option><option value="none">Sin marco</option></select></div>
+</div>
+<div class="field"><label>Tamaño de la foto <output data-out="photoSize"></output> %</label><input type="range" min="30" max="80" step="1" data-set="photoSize"></div>
+<div class="grid2">
+<div class="field"><label>Ajuste de la foto</label><select data-set="imageFit"><option value="contain">Completa</option><option value="cover">Rellenar (recorta)</option></select></div>
+<div class="field"><label>Alineación del texto</label><select data-set="align"><option value="left">Izquierda</option><option value="center">Centrado</option></select></div>
+</div>
+<div class="field"><label>Redondeo de esquinas <output data-out="radius"></output> mm</label><input type="range" min="0" max="8" step="0.5" data-set="radius"></div>
+</details>
+
+<details><summary>Contenido de las tarjetas</summary>
+<div class="checks">
+<label class="check"><input type="checkbox" data-set="showPhotos"> Fotos</label>
+<label class="check"><input type="checkbox" data-set="showBrand"> Marca</label>
+<label class="check"><input type="checkbox" data-set="showDesc"> Descripción</label>
+<label class="check"><input type="checkbox" data-set="showFormat"> Formato</label>
+<label class="check"><input type="checkbox" data-set="showRefs"> Referencia</label>
+<label class="check"><input type="checkbox" data-set="showPrice"> Precio</label>
+<label class="check"><input type="checkbox" data-set="showBadge"> Etiqueta «Novedad»</label>
+<label class="check"><input type="checkbox" data-set="upperName"> Nombre en mayúsculas</label>
+</div>
+</details>
+
+<details><summary>Colores y tipografía</summary>
+<div class="grid2">
+<div class="field"><label>Color principal</label><input type="color" data-set="accent"></div>
+<div class="field"><label>Color del texto</label><input type="color" data-set="textColor"></div>
+<div class="field"><label>Fondo de página</label><input type="color" data-set="pageBg"></div>
+<div class="field"><label>Fondo de tarjeta</label><input type="color" data-set="cardBg"></div>
+<div class="field"><label>Fondo de la foto</label><input type="color" data-set="imageBg"></div>
+</div>
+<div class="grid2">
+<div class="field"><label>Letra de títulos</label><select data-set="headingFont" class="fontsel"></select></div>
+<div class="field"><label>Letra del texto</label><select data-set="bodyFont" class="fontsel"></select></div>
+</div>
+<div class="field"><label>Tamaño del texto <output data-out="fontScale"></output> %</label><input type="range" min="70" max="140" step="5" data-set="fontScale"></div>
+</details>
+
+<details><summary>Impresión</summary>
+<div class="field"><label>Margen de impresora <output data-out="printerMargin"></output> mm</label><input type="range" min="0" max="10" step="1" data-set="printerMargin"></div>
+<p class="hint">Déjalo en 0. Si al imprimir aparecen páginas cortadas o en blanco, súbelo poco a poco (5 mm suele bastar).</p>
+</details>
+
+<div class="actions"><button id="print">Generar PDF / Imprimir</button><button class="ghost" id="resetDesign">Restablecer diseño</button></div>
+<p class="hint">En el cuadro de impresión del iPad, usa Compartir → Guardar en Archivos para guardar el PDF.</p>
+</aside>
+<div id="pages" class="pages"></div>
+</div>
+</section>
+
+<section id="productos" class="hidden narrow">
+<div class="panel">
+<h2 id="formTitle">Añadir producto</h2><input type="hidden" id="editId">
+<div class="grid2"><div class="field"><label>Marca</label><input id="brand" placeholder="Marca" list="brandList"></div><div class="field"><label>Nombre / sabor</label><input id="name" placeholder="Nombre"></div></div>
+<datalist id="brandList"></datalist>
+<div class="field"><label>Descripción</label><textarea id="desc" placeholder="Descripción del sabor"></textarea></div>
+<div class="grid3"><div class="field"><label>Formato</label><input id="pack" placeholder="10 × 50 g"></div><div class="field"><label>Referencia</label><input id="ref" placeholder="Referencia"></div><div class="field"><label>Precio</label><input id="price" placeholder="Ej.: 12,50 €"></div></div>
+<div class="checks"><label class="check"><input type="checkbox" id="isNew"> Marcar como novedad</label><label class="check"><input type="checkbox" id="isHidden"> No mostrar en el catálogo</label></div>
+<div class="field"><label>Fotografía del paquete</label>
+<div class="photo-row"><img id="photoPreview" alt=""><div><input id="photo" type="file" accept="image/*"><button class="danger hidden" id="photoRemove">Quitar foto</button></div></div></div>
+<div class="actions"><button id="saveProduct">Guardar producto</button><button class="secondary" id="clearForm">Limpiar</button></div>
+<p class="hint">Puedes hacer una foto con la cámara del iPad o elegirla de Fotos. Las fotos se reducen automáticamente para ocupar poco espacio.</p>
+</div>
+<div class="listhead"><h2>Productos guardados</h2><input id="search" type="search" placeholder="Buscar…"></div>
+<div id="productList" class="productlist"></div>
+</section>
+
+<section id="datos" class="hidden narrow">
+<div class="panel"><h2>Seguridad de tus datos</h2><p>Los productos, fotos y el diseño se guardan en el almacenamiento de esta aplicación en el navegador del iPad.</p>
+<div class="actions"><button id="export">Exportar copia de seguridad</button><button class="secondary" id="importBtn">Importar copia</button><input id="importFile" type="file" accept="application/json,.json" hidden></div>
+<p class="hint">Guarda una copia periódicamente en Archivos o iCloud Drive. Si borras los datos del navegador o cambias de dispositivo, podrás restaurarla con esta copia. Al importar, los productos de la copia se añaden o actualizan; no se borra nada.</p>
+</div></section>
+</main>
+<div class="bottom"><button class="secondary" id="quickAdd">＋ Añadir producto</button><button id="quickPdf">Crear PDF</button></div>
+<script src="seed.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

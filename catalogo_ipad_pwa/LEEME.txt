@@ -1,0 +1,35 @@
+# Mi catálogo de cachimba — versión para iPad
+
+## Publicar la aplicación (necesita hacerse una sola vez)
+Esta carpeta contiene una PWA. Para instalarla en iPad debe estar servida desde una dirección HTTPS. No basta con abrir `index.html` desde Archivos.
+
+### Opción sencilla: Netlify Drop
+1. Desde un ordenador, abre https://app.netlify.com/drop e inicia sesión o crea una cuenta gratuita.
+2. Descomprime `catalogo_ipad_pwa.zip`.
+3. Arrastra la carpeta `catalogo_ipad_pwa` (la que contiene `index.html`, `app.js`, `styles.css`, `seed.js`, `manifest.webmanifest` y `sw.js`) a Netlify Drop.
+4. Netlify te dará una dirección web HTTPS. Ábrela en Safari en el iPad.
+
+### Instalar en la pantalla de inicio del iPad
+1. Abre la dirección HTTPS en Safari.
+2. Pulsa Compartir (cuadrado con flecha hacia arriba).
+3. Elige «Añadir a pantalla de inicio».
+4. Confirma con «Añadir». Se creará un icono como el de una app.
+
+## Uso
+- La primera apertura necesita internet. Después de cargar, la app guarda los archivos necesarios para funcionar sin conexión.
+- Los productos y las fotos se guardan en IndexedDB del navegador de ese iPad.
+- Usa «Copias de seguridad» y exporta un JSON de vez en cuando. Guarda esa copia en Archivos/iCloud Drive.
+- Para restaurar, pulsa «Importar copia» y selecciona el JSON.
+- En «Catálogo y diseño» ves las páginas tal y como saldrán en el PDF. Pulsa «Personalizar diseño» (en iPad horizontal el panel aparece siempre a la izquierda) para cambiar:
+  - Textos: título, subtítulo, pie de página y logotipo.
+  - Página: papel (A4, A5, Carta), orientación, márgenes, encabezado, numeración y portada (de color, clara o con mosaico de fotos).
+  - Distribución: columnas, filas por página, separación, orden y agrupación por marca (con título o cada marca en página nueva).
+  - Tarjetas: foto arriba o a la izquierda, estilo, tamaño y ajuste de la foto, alineación y redondeo.
+  - Contenido: qué datos se muestran (foto, marca, descripción, formato, referencia, precio, «Novedad»).
+  - Colores y tipografía: temas predefinidos, colores, tipos de letra y tamaño del texto.
+- En «Productos» puedes buscar, reordenar con ↑ ↓ (orden «Manual»), ocultar productos del catálogo sin borrarlos y marcarlos como novedad.
+- Pulsa «Crear PDF»; en la hoja de impresión del iPad usa Compartir → «Guardar en Archivos» para conservar el PDF. Si salen páginas cortadas o en blanco, sube «Margen de impresora» en el apartado Impresión.
+- Al publicar una versión nueva, cambia el número de `CACHE` en `sw.js` para que el iPad descargue los archivos actualizados (se aplican al abrir la app por segunda vez).
+
+## Importante
+Los datos se guardan localmente en ese navegador/dispositivo; no se sincronizan automáticamente con otros dispositivos. No borres los datos del sitio ni Safari sin antes exportar una copia. La impresión/PDF depende de las opciones disponibles en iPadOS.
