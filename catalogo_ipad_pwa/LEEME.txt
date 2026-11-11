@@ -3,7 +3,12 @@
 ## Publicar la aplicación (necesita hacerse una sola vez)
 Esta carpeta contiene una PWA. Para instalarla en iPad debe estar servida desde una dirección HTTPS. No basta con abrir `index.html` desde Archivos.
 
-### Opción sencilla: Netlify Drop
+### Opción recomendada: GitHub Pages
+1. Cada vez que se suben cambios a la rama `main` de GitHub, la app se publica sola.
+2. Solo la primera vez: en el repositorio de GitHub entra en Settings → Pages y en «Source» elige «GitHub Actions».
+3. La dirección será https://rmaon.github.io/catalogo-para-tabaco/ (aparece también en Settings → Pages).
+
+### Alternativa: Netlify Drop
 1. Desde un ordenador, abre https://app.netlify.com/drop e inicia sesión o crea una cuenta gratuita.
 2. Descomprime `catalogo_ipad_pwa.zip`.
 3. Arrastra la carpeta `catalogo_ipad_pwa` (la que contiene `index.html`, `app.js`, `styles.css`, `seed.js`, `manifest.webmanifest` y `sw.js`) a Netlify Drop.
