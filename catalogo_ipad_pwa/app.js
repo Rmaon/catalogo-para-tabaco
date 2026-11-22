@@ -635,7 +635,7 @@ function pageHTML(items, i, total, g) {
   html += `<div class="p-body" style="gap:${mm(g.gap)}">`;
   if (!items.length) html += `<div class="p-empty">No hay productos visibles. Añádelos en la pestaña «Productos».</div>`;
   for (const it of items) {
-    if ('group' in it) html += `<div class="p-group" style="height:${GROUP_H}mm">${esc(it.group)}${it.cont ? '<small> · continuación</small>' : ''}</div>`;
+    if ('group' in it) html += `<div class="p-group" style="height:${GROUP_H}mm">${esc(it.group)}</div>`;
     else html += `<div class="p-row" style="height:${mm(g.cardH)};grid-template-columns:repeat(${g.cols},minmax(0,1fr));gap:${mm(g.gap)}">${it.row.map(p => cardHTML(p, g)).join('')}</div>`;
   }
   html += '</div>';
