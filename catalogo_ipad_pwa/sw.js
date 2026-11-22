@@ -1,5 +1,5 @@
 // Sube la versión al publicar cambios para que el iPad descargue los archivos nuevos
-const CACHE = 'catalogo-cachimba-v5', FONT_CACHE = 'catalogo-fuentes';
+const CACHE = 'catalogo-cachimba-v6', FONT_CACHE = 'catalogo-fuentes';
 const FILES = ['./', './index.html', './styles.css', './app.js', './seed.js', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => e.waitUntil(

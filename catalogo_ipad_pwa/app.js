@@ -425,31 +425,58 @@ function catalogProducts() {
 
 function paginate(list, g) {
   const items = [];
-  const pushRows = arr => { for (let i = 0; i < arr.length; i += g.cols) items.push({ row: arr.slice(i, i + g.cols) }); };
+  const pushRows = (arr, brand) => { for (let i = 0; i < arr.length; i += g.cols) items.push({ row: arr.slice(i, i + g.cols), brand }); };
   if (S.groupByBrand === 'no') pushRows(list);
   else {
     let i = 0;
     while (i < list.length) {
       let j = i;
       while (j < list.length && cmp(list[j].brand, list[i].brand) === 0) j++;
-      items.push({ group: list[i].brand || 'Sin marca' });
-      pushRows(list.slice(i, j));
+      const brand = list[i].brand || 'Sin marca';
+      items.push({ group: brand });
+      pushRows(list.slice(i, j), brand);
       i = j;
     }
   }
   const pages = [];
-  let cur, y;
-  const open = () => { cur = []; pages.push(cur); y = 0; };
+  if (S.groupByBrand === 'no') {
+    let cur, y;
+    const open = () => { cur = []; cur.cardH = g.cardH; pages.push(cur); y = 0; };
+    open();
+    for (const it of items) {
+      if (cur.length && y + (cur.length ? g.gap : 0) + g.cardH > g.avail(pages.length - 1) + 0.01) open();
+      y += (cur.length ? g.gap : 0) + g.cardH;
+      cur.push(it);
+    }
+    return pages;
+  }
+  // Con títulos de marca: cada página lleva siempre el mismo número de filas y las tarjetas
+  // se ajustan para dejar sitio a los títulos que caen en ella, así no quedan huecos.
+  const rowsPer = S.rows, minH = g.cardH * 0.6;
+  const fill = (i, groups) => (g.avail(i) - groups * (GROUP_H + g.gap) - (rowsPer - 1) * g.gap) / rowsPer;
+  let cur, nRows, nGroups;
+  const open = () => { cur = []; pages.push(cur); nRows = nGroups = 0; };
+  const fits = (r, gr) => r <= rowsPer && fill(pages.length - 1, gr) >= minH;
   open();
   for (const it of items) {
-    const isGroup = 'group' in it, hgt = isGroup ? GROUP_H : g.cardH;
-    if (isGroup && S.groupByBrand === 'page' && cur.length) open();
-    let need = (cur.length ? g.gap : 0) + hgt;
-    if (isGroup) need += g.gap + g.cardH; // el título de marca nunca queda solo al pie de página
-    if (cur.length && y + need > g.avail(pages.length - 1) + 0.01) open();
-    y += (cur.length ? g.gap : 0) + hgt;
+    if ('group' in it) {
+      // el título de marca nunca queda solo al pie de página
+      if (cur.length && (S.groupByBrand === 'page' || !fits(nRows + 1, nGroups + 1))) open();
+      nGroups++;
+    } else {
+      if (cur.length && !fits(nRows + 1, nGroups)) {
+        open();
+        cur.push({ group: it.brand, cont: true }); // la marca sigue en la página nueva: se repite su título
+        nGroups++;
+      }
+      nRows++;
+    }
     cur.push(it);
   }
+  pages.forEach((pg, i) => {
+    const gr = pg.filter(x => 'group' in x).length;
+    pg.cardH = Math.max(minH, fill(i, gr));
+  });
   return pages;
 }
 
@@ -592,6 +619,7 @@ function decoSVG(w, h, i) {
 }
 
 function pageHTML(items, i, total, g) {
+  if (items.cardH) g = { ...g, cardH: items.cardH }; // alto de tarjeta propio de esta página
   const head = g.head(i), full = head === HEAD_FULL;
   let html = `<div class="page" style="width:${mm(g.pw)};height:${mm(g.ph)};padding:${mm(g.pad)}">` + decoHTML(g, i + 1);
   if (head) {
@@ -607,7 +635,7 @@ function pageHTML(items, i, total, g) {
   html += `<div class="p-body" style="gap:${mm(g.gap)}">`;
   if (!items.length) html += `<div class="p-empty">No hay productos visibles. Añádelos en la pestaña «Productos».</div>`;
   for (const it of items) {
-    if ('group' in it) html += `<div class="p-group" style="height:${GROUP_H}mm">${esc(it.group)}</div>`;
+    if ('group' in it) html += `<div class="p-group" style="height:${GROUP_H}mm">${esc(it.group)}${it.cont ? '<small> · continuación</small>' : ''}</div>`;
     else html += `<div class="p-row" style="height:${mm(g.cardH)};grid-template-columns:repeat(${g.cols},minmax(0,1fr));gap:${mm(g.gap)}">${it.row.map(p => cardHTML(p, g)).join('')}</div>`;
   }
   html += '</div>';
