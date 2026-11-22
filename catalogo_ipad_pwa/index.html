@@ -210,7 +210,8 @@
 <div class="checks"><label class="check"><input type="checkbox" id="isNew"> Marcar como novedad</label><label class="check"><input type="checkbox" id="isHidden"> No mostrar en el catálogo</label></div>
 <div class="field"><label>Fotografía del paquete</label>
 <div class="photo-row"><img id="photoPreview" alt=""><div><input id="photo" type="file" accept="image/*"><button class="danger hidden" id="photoRemove">Quitar foto</button></div></div></div>
-<div class="actions"><button id="saveProduct">Guardar producto</button><button class="secondary" id="clearForm">Limpiar</button></div>
+<div class="actions"><button id="saveProduct">Guardar producto</button><button class="secondary hidden" id="saveCopy">Guardar como sabor nuevo</button><button class="secondary" id="clearForm">Limpiar</button></div>
+<p class="hint hidden" id="copyHint">«Guardar como sabor nuevo» crea otro producto con estos datos (p. ej. el mismo sabor en 200 g) y deja el original sin cambios.</p>
 <p class="hint">Puedes hacer una foto con la cámara del iPad o elegirla de Fotos. Las fotos se reducen automáticamente para ocupar poco espacio.</p>
 </div>
 <div class="listhead"><h2>Productos guardados</h2><input id="search" type="search" placeholder="Buscar…"></div>
@@ -230,7 +231,7 @@
 <button class="ghost small" data-bulk="new">Marcar novedad</button><button class="ghost small" data-bulk="notnew">Quitar novedad</button>
 <button class="ghost small" data-bulk="tag">Etiqueta…</button><button class="ghost small" data-bulk="brand">Cambiar marca…</button>
 <button class="ghost small" data-bulk="color">Color…</button><button class="ghost small" data-bulk="autocolor">Color automático</button>
-<button class="ghost small" data-bulk="top">Al principio</button><button class="ghost small" data-bulk="bottom">Al final</button>
+<button class="ghost small" data-bulk="dup">Duplicar</button><button class="ghost small" data-bulk="top">Al principio</button><button class="ghost small" data-bulk="bottom">Al final</button>
 <button class="danger small" data-bulk="del">Eliminar</button>
 <input type="color" id="bulkColor" class="hidden-input"></div>
 <div class="main-actions" id="mainActions"><button class="secondary" id="quickAdd">＋ Añadir producto</button><button id="quickPdf">Crear PDF</button></div>

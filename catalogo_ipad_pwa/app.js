@@ -730,6 +730,7 @@ function renderList() {
       `<div class="btns"><button class="ghost small" data-act="up" ${q || i === 0 ? 'disabled' : ''} aria-label="Subir">↑</button>` +
       `<button class="ghost small" data-act="down" ${q || i === products.length - 1 ? 'disabled' : ''} aria-label="Bajar">↓</button>` +
       `<button class="ghost small" data-act="vis">${p.hidden ? 'Mostrar' : 'Ocultar'}</button>` +
+      `<button class="ghost small" data-act="dup">Duplicar</button>` +
       `<button class="secondary small" data-act="edit">Editar</button>` +
       `<button class="danger small" data-act="del" aria-label="Eliminar">×</button></div></div>`;
   }).join('') : `<p class="hint">${q ? 'Ningún producto coincide con la búsqueda.' : 'Todavía no hay productos.'}</p>`;
@@ -785,6 +786,9 @@ async function bulkAction(act) {
       return;
     }
     case 'autocolor': items.forEach(p => p.color = ''); break;
+    case 'dup':
+      await duplicateProducts(items.map(p => p.id));
+      return toast(`${items.length === 1 ? 'Duplicado 1 producto' : `Duplicados ${items.length} productos`}`);
     case 'top': case 'bottom': {
       const sel = products.filter(p => selected.has(p.id)), rest = products.filter(p => !selected.has(p.id));
       products = act === 'top' ? [...sel, ...rest] : [...rest, ...sel];
@@ -845,6 +849,7 @@ function clearForm() {
   pendingImage = undefined;
   showPhotoPreview('');
   $('formTitle').textContent = 'Añadir producto';
+  $('saveCopy').classList.add('hidden'); $('copyHint').classList.add('hidden');
 }
 
 function editProduct(id) {
@@ -865,8 +870,22 @@ function editProduct(id) {
   $('pcolor').disabled = !p.color;
   showPhotoPreview(p.image);
   $('formTitle').textContent = 'Editar producto';
+  $('saveCopy').classList.remove('hidden'); $('copyHint').classList.remove('hidden');
   showTab('productos');
   window.scrollTo(0, 0);
+}
+
+// Crea una copia de cada producto justo debajo del original (mismo sabor en otro formato, p. ej.)
+async function duplicateProducts(ids) {
+  const copies = [], next = [];
+  for (const p of products) {
+    next.push(p);
+    if (ids.includes(p.id)) { const c = { ...p, id: uid() }; next.push(c); copies.push(c); }
+  }
+  next.forEach((p, i) => p.order = i);
+  await putMany(next);
+  await refresh();
+  return copies;
 }
 
 async function moveProduct(id, dir) {
@@ -1001,22 +1020,35 @@ $('photoRemove').onclick = () => { pendingImage = ''; $('photo').value = ''; sho
 $('useColor').onchange = () => { $('pcolor').disabled = !$('useColor').checked; };
 
 $('clearForm').onclick = clearForm;
-$('saveProduct').onclick = async () => {
+// asCopy: guarda el formulario como un producto nuevo, justo debajo del que se estaba editando
+async function saveProduct(asCopy) {
   const brand = $('brand').value.trim(), name = $('name').value.trim();
   if (!brand || !name) { alert('Introduce la marca y el nombre.'); return; }
-  const id = $('editId').value || uid(), old = products.find(p => p.id === id);
-  const image = pendingImage === undefined ? old?.image || '' : await pendingImage;
-  const autoColor = image && image === old?.image && old.autoColor !== undefined ? old.autoColor : image ? await dominantColor(image) : '';
-  const order = old ? old.order : products.reduce((m, p) => Math.max(m, p.order ?? 0), -1) + 1;
-  await put({
-    ...old, id, order, brand, name, image, autoColor, color: $('useColor').checked ? $('pcolor').value : '',
+  const source = products.find(p => p.id === $('editId').value);
+  if (asCopy && !source) return;
+  const id = asCopy ? uid() : source?.id || uid(), old = asCopy ? undefined : source;
+  const image = pendingImage === undefined ? source?.image || '' : await pendingImage;
+  const autoColor = image && image === source?.image && source.autoColor !== undefined ? source.autoColor : image ? await dominantColor(image) : '';
+  const item = {
+    ...source, id, brand, name, image, autoColor, color: $('useColor').checked ? $('pcolor').value : '',
     description: $('desc').value.trim(), format: $('pack').value.trim(), reference: $('ref').value.trim(),
     price: $('price').value.trim(), tag: $('tag').value.trim(), isNew: $('isNew').checked, hidden: $('isHidden').checked
-  });
+  };
+  if (asCopy) {
+    const list = [...products];
+    list.splice(list.indexOf(source) + 1, 0, item);
+    list.forEach((p, i) => p.order = i);
+    await putMany(list);
+  } else {
+    item.order = old ? old.order : products.reduce((m, p) => Math.max(m, p.order ?? 0), -1) + 1;
+    await put(item);
+  }
   clearForm();
   await refresh();
-  toast(old ? 'Producto actualizado' : 'Producto añadido');
-};
+  toast(asCopy ? 'Sabor nuevo guardado (el original no cambia)' : old ? 'Producto actualizado' : 'Producto añadido');
+}
+$('saveProduct').onclick = () => saveProduct(false);
+$('saveCopy').onclick = () => saveProduct(true);
 
 $('search').addEventListener('input', renderList);
 $('selAll').onchange = () => {
@@ -1039,6 +1071,11 @@ $('productList').onclick = async e => {
     case 'up': return moveProduct(id, -1);
     case 'down': return moveProduct(id, 1);
     case 'edit': return editProduct(id);
+    case 'dup': {
+      const [copy] = await duplicateProducts([id]);
+      editProduct(copy.id);
+      return toast('Copia creada: cambia el formato, la referencia o el precio y guarda');
+    }
     case 'vis': p.hidden = !p.hidden; await put(p); return render();
     case 'del':
       if (confirm(`¿Eliminar «${p.brand} · ${p.name}»?`)) { await del(id); await refresh(); }
