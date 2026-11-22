@@ -14,12 +14,13 @@
 <style id="pageRule"></style>
 </head>
 <body>
-<header class="appbar"><h1>Mi catálogo de cachimba</h1><p>Gestor de productos · funciona también sin conexión</p></header>
+<header class="appbar"><div><h1>Mi catálogo de cachimba</h1><p>Gestor de productos · funciona también sin conexión</p></div><button class="appbar-x" id="hideAppbar">Ocultar cabecera</button></header>
 <main>
 <nav class="tabs">
 <button class="tab active" data-tab="catalogo">Catálogo y diseño</button>
 <button class="tab" data-tab="productos">Productos</button>
 <button class="tab" data-tab="datos">Copias de seguridad</button>
+<button class="tab tab-link hidden" id="showAppbar">Mostrar cabecera de la app</button>
 </nav>
 
 <section id="catalogo">
@@ -38,7 +39,8 @@
 <div class="chips" id="myDesigns"></div>
 <button class="ghost small" id="saveDesign">＋ Guardar el diseño actual</button>
 
-<details open id="textsSection"><summary>Textos</summary>
+<details open id="textsSection"><summary>Textos y encabezado</summary>
+<div class="field"><label>Encabezado de las páginas (título arriba)</label><select data-set="header"><option value="all">En todas las páginas</option><option value="first">Solo en la primera</option><option value="none">Sin encabezado</option></select></div>
 <div class="field"><label>Título</label><input data-set="title" id="titleInput"></div>
 <div class="field"><label>Subtítulo</label><input data-set="subtitle"></div>
 <div class="field"><label>Pie de página (contacto, web, teléfono…)</label><input data-set="footerText" placeholder="Ej.: pedidos@tienda.com · 600 000 000"></div>
@@ -52,10 +54,7 @@
 <div class="field"><label>Tamaño de papel</label><select data-set="paper"><option value="A4">A4</option><option value="A5">A5</option><option value="Carta">Carta</option></select></div>
 <div class="field"><label>Orientación</label><select data-set="orientation"><option value="portrait">Vertical</option><option value="landscape">Horizontal</option></select></div>
 </div>
-<div class="grid2">
-<div class="field"><label>Encabezado</label><select data-set="header"><option value="all">En todas las páginas</option><option value="first">Solo en la primera</option><option value="none">Sin encabezado</option></select></div>
 <div class="field"><label>Márgenes <output data-out="margin"></output> mm</label><input type="range" min="4" max="25" step="1" data-set="margin"></div>
-</div>
 <label class="check"><input type="checkbox" data-set="pageNumbers"> Numerar páginas</label>
 <label class="check"><input type="checkbox" data-set="cover"> Añadir portada</label>
 <div class="field cover-only"><label>Texto de portada (edición, temporada…)</label><input data-set="edition" placeholder="Ej.: Novedades otoño 2026"></div>
@@ -77,7 +76,7 @@
 <details><summary>Tarjetas</summary>
 <div class="grid2">
 <div class="field"><label>Disposición</label><select data-set="layout"><option value="feature">Revista (sabor grande)</option><option value="vertical">Foto arriba</option><option value="horizontal">Foto a la izquierda</option></select></div>
-<div class="field"><label>Estilo</label><select data-set="cardStyle"><option value="tint">Tinte del sabor</option><option value="gradient">Degradado del sabor</option><option value="outline">Contorno de color</option><option value="glass">Cristal translúcido</option><option value="border">Con borde</option><option value="shadow">Con sombra</option><option value="flat">Fondo suave</option><option value="accent">Línea de color</option><option value="none">Sin marco</option></select></div>
+<div class="field"><label>Estilo</label><select data-set="cardStyle"><option value="tint">Tinte del sabor</option><option value="solid">Color del sabor (lleno)</option><option value="gradient">Degradado del sabor</option><option value="stripe">Franja lateral del sabor</option><option value="outline">Contorno de color</option><option value="glass">Cristal translúcido</option><option value="border">Con borde</option><option value="double">Doble línea</option><option value="dashed">Borde discontinuo</option><option value="shadow">Con sombra</option><option value="flat">Fondo suave</option><option value="accent">Línea de color</option><option value="none">Sin marco</option></select></div>
 </div>
 <div class="field"><label>Tamaño de la foto <output data-out="photoSize"></output> %</label><input type="range" min="30" max="80" step="1" data-set="photoSize"></div>
 <div class="grid2">
@@ -93,7 +92,14 @@
 <label class="check"><input type="checkbox" data-set="alternate"> Alternar lados</label>
 <label class="check"><input type="checkbox" data-set="showNumbers"> Numerar (01, 02…)</label>
 </div>
+<div class="grid2">
+<div class="field horiz-only"><label>Lado de la foto</label><select data-set="photoSide"><option value="left">Izquierda</option><option value="right">Derecha</option><option value="alternate">Alternando</option></select></div>
+<div class="field"><label>Posición del texto</label><select data-set="textVAlign"><option value="auto">Automática</option><option value="top">Arriba</option><option value="center">Centrado</option><option value="bottom">Abajo</option></select></div>
+</div>
+<div class="grid2">
 <div class="field"><label>Redondeo de esquinas <output data-out="radius"></output> mm</label><input type="range" min="0" max="8" step="0.5" data-set="radius"></div>
+<div class="field"><label>Relleno interior <output data-out="cardPad"></output> mm</label><input type="range" min="0" max="7" step="0.5" data-set="cardPad"></div>
+</div>
 </details>
 
 <details><summary>Contenido de las tarjetas</summary>
@@ -108,6 +114,11 @@
 <label class="check"><input type="checkbox" data-set="upperName"> Nombre en mayúsculas</label>
 </div>
 <div class="field"><label>Texto de la etiqueta</label><input data-set="badgeText" placeholder="Novedad"></div>
+<div class="grid2">
+<div class="field"><label>Estilo del precio</label><select data-set="priceStyle"><option value="auto">Automático</option><option value="text">Texto de color</option><option value="pill">Píldora de color</option><option value="outline">Contorno</option><option value="big">Grande</option></select></div>
+<div class="field"><label>Estilo de la marca</label><select data-set="brandStyle"><option value="caps">Mayúsculas espaciadas</option><option value="pill">Etiqueta de color</option><option value="plain">Cursiva sencilla</option></select></div>
+</div>
+<label class="check grid-only"><input type="checkbox" data-set="showDivider"> Línea sobre el precio</label>
 </details>
 
 <details open><summary>Decoración</summary>
@@ -116,7 +127,7 @@
 <div class="field"><label>Intensidad <output data-out="decoOpacity"></output> %</label><input type="range" min="15" max="100" step="5" data-set="decoOpacity"></div>
 </div>
 <div class="grid2">
-<div class="field"><label>Encabezado</label><select data-set="headerStyle"><option value="band">Banda de color</option><option value="classic">Clásico</option><option value="center">Centrado</option></select></div>
+<div class="field head-only"><label>Estilo del encabezado</label><select data-set="headerStyle"><option value="band">Banda de color</option><option value="classic">Clásico</option><option value="center">Centrado</option></select></div>
 <div class="field"><label>Marco de página</label><select data-set="frame"><option value="none">Sin marco</option><option value="line">Línea fina</option><option value="double">Doble línea</option><option value="corners">Esquinas</option></select></div>
 </div>
 <label class="check"><input type="checkbox" data-set="flavorColors"> Un color para cada sabor</label>
@@ -160,6 +171,7 @@
 <div class="grid2">
 <div class="field"><label>Tamaño del título <output data-out="titleScale"></output> %</label><input type="range" min="60" max="160" step="5" data-set="titleScale"></div>
 <div class="field"><label>Tamaño de los nombres <output data-out="nameScale"></output> %</label><input type="range" min="60" max="160" step="5" data-set="nameScale"></div>
+<div class="field"><label>Tamaño de la descripción <output data-out="descScale"></output> %</label><input type="range" min="70" max="150" step="5" data-set="descScale"></div>
 <div class="field"><label>Grosor de los nombres</label><select data-set="nameWeight"><option value="400">Normal</option><option value="600">Seminegrita</option><option value="800">Negrita</option><option value="900">Extra negrita</option></select></div>
 <div class="field"><label>Espaciado de letras <output data-out="nameSpacing"></output></label><input type="range" min="-4" max="20" step="1" data-set="nameSpacing"></div>
 <div class="field"><label>Color de los nombres</label><select data-set="nameColor"><option value="text">Color del texto</option><option value="flavor">Color de cada sabor</option><option value="accent">Color principal</option></select></div>
@@ -202,6 +214,7 @@
 <p class="hint">Puedes hacer una foto con la cámara del iPad o elegirla de Fotos. Las fotos se reducen automáticamente para ocupar poco espacio.</p>
 </div>
 <div class="listhead"><h2>Productos guardados</h2><input id="search" type="search" placeholder="Buscar…"></div>
+<div class="selhead"><label class="check"><input type="checkbox" id="selAll"> <span id="selAllLabel">Seleccionar todos</span></label><span class="hint">Toca un producto para seleccionarlo y cambiar varios a la vez.</span></div>
 <div id="productList" class="productlist"></div>
 </section>
 
@@ -211,7 +224,17 @@
 <p class="hint">Guarda una copia periódicamente en Archivos o iCloud Drive. Si borras los datos del navegador o cambias de dispositivo, podrás restaurarla con esta copia. Al importar, los productos de la copia se añaden o actualizan; no se borra nada.</p>
 </div></section>
 </main>
-<div class="bottom"><button class="secondary" id="quickAdd">＋ Añadir producto</button><button id="quickPdf">Crear PDF</button></div>
+<div class="bottom">
+<div class="bulk hidden" id="bulkBar"><b id="selCount"></b><button class="secondary small" data-bulk="clear">Cancelar</button>
+<button class="ghost small" data-bulk="show">Mostrar</button><button class="ghost small" data-bulk="hide">Ocultar</button>
+<button class="ghost small" data-bulk="new">Marcar novedad</button><button class="ghost small" data-bulk="notnew">Quitar novedad</button>
+<button class="ghost small" data-bulk="tag">Etiqueta…</button><button class="ghost small" data-bulk="brand">Cambiar marca…</button>
+<button class="ghost small" data-bulk="color">Color…</button><button class="ghost small" data-bulk="autocolor">Color automático</button>
+<button class="ghost small" data-bulk="top">Al principio</button><button class="ghost small" data-bulk="bottom">Al final</button>
+<button class="danger small" data-bulk="del">Eliminar</button>
+<input type="color" id="bulkColor" class="hidden-input"></div>
+<div class="main-actions" id="mainActions"><button class="secondary" id="quickAdd">＋ Añadir producto</button><button id="quickPdf">Crear PDF</button></div>
+</div>
 <script src="seed.js"></script>
 <script src="app.js"></script>
 </body>

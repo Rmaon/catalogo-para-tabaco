@@ -70,13 +70,19 @@ const PRESETS = [
   { name: 'Pastel', accent: '#9b7ede', textColor: '#2f2840', pageBg: '#fdf9ff', cardBg: '#ffffff', imageBg: '#f3edff' }
 ];
 
-// Plantillas de un toque: solo cambian la maquetación y la decoración, no los textos ni los colores
+// Plantillas de un toque: solo cambian la maquetación y la decoración, no los textos ni los colores.
+// TPL fija las opciones nuevas para que cada plantilla se vea siempre igual.
+const TPL = { cardPad: 2.5, priceStyle: 'auto', brandStyle: 'caps', textVAlign: 'auto', photoSide: 'left', showDivider: true, photoTilt: 0, align: 'left' };
 const TEMPLATES = [
-  { name: 'Revista', note: '3 por página', set: { orientation: 'portrait', layout: 'feature', cols: 1, rows: 3, cardStyle: 'tint', photoSize: 42, photoShape: 'circle', photoDeco: true, alternate: true, showNumbers: true, decoration: 'smoke', frame: 'none', headerStyle: 'band', badgeStyle: 'seal', imageFit: 'contain', groupByBrand: 'no' } },
-  { name: 'Escaparate', note: '3 por página', set: { orientation: 'landscape', layout: 'vertical', cols: 3, rows: 1, cardStyle: 'tint', photoSize: 58, photoShape: 'arch', photoDeco: true, decoration: 'circles', frame: 'none', headerStyle: 'center', badgeStyle: 'seal', imageFit: 'contain', groupByBrand: 'no' } },
-  { name: 'Fichas', note: '3 por página', set: { orientation: 'portrait', layout: 'horizontal', cols: 1, rows: 3, cardStyle: 'border', photoSize: 36, photoShape: 'rounded', photoDeco: false, decoration: 'dots', frame: 'line', headerStyle: 'classic', badgeStyle: 'pill', imageFit: 'contain', groupByBrand: 'no' } },
-  { name: 'Lista', note: '6 por página', set: { orientation: 'portrait', layout: 'horizontal', cols: 1, rows: 6, cardStyle: 'flat', photoSize: 22, photoShape: 'rounded', photoDeco: false, decoration: 'none', frame: 'none', headerStyle: 'classic', badgeStyle: 'pill', imageFit: 'contain', groupByBrand: 'yes' } },
-  { name: 'Cuadrícula', note: '9 por página', set: { orientation: 'portrait', layout: 'vertical', cols: 3, rows: 3, cardStyle: 'border', photoSize: 58, photoShape: 'rounded', photoDeco: false, decoration: 'none', frame: 'none', headerStyle: 'classic', badgeStyle: 'pill', imageFit: 'contain' } }
+  { name: 'Revista', note: '3 por página', set: { ...TPL, orientation: 'portrait', layout: 'feature', cols: 1, rows: 3, cardStyle: 'tint', photoSize: 42, photoShape: 'circle', photoDeco: true, alternate: true, showNumbers: true, decoration: 'smoke', frame: 'none', headerStyle: 'band', badgeStyle: 'seal', imageFit: 'contain', groupByBrand: 'no' } },
+  { name: 'Escaparate', note: '3 por página', set: { ...TPL, orientation: 'landscape', layout: 'vertical', cols: 3, rows: 1, cardStyle: 'tint', photoSize: 58, photoShape: 'arch', photoDeco: true, decoration: 'circles', frame: 'none', headerStyle: 'center', badgeStyle: 'seal', imageFit: 'contain', groupByBrand: 'no' } },
+  { name: 'Fichas', note: '3 por página', set: { ...TPL, orientation: 'portrait', layout: 'horizontal', cols: 1, rows: 3, cardStyle: 'border', photoSize: 36, photoShape: 'rounded', photoDeco: false, decoration: 'dots', frame: 'line', headerStyle: 'classic', badgeStyle: 'pill', imageFit: 'contain', groupByBrand: 'no' } },
+  { name: 'Lista', note: '6 por página', set: { ...TPL, orientation: 'portrait', layout: 'horizontal', cols: 1, rows: 6, cardStyle: 'flat', photoSize: 22, photoShape: 'rounded', photoDeco: false, decoration: 'none', frame: 'none', headerStyle: 'classic', badgeStyle: 'pill', imageFit: 'contain', groupByBrand: 'yes' } },
+  { name: 'Cuadrícula', note: '9 por página', set: { ...TPL, orientation: 'portrait', layout: 'vertical', cols: 3, rows: 3, cardStyle: 'border', photoSize: 58, photoShape: 'rounded', photoDeco: false, decoration: 'none', frame: 'none', headerStyle: 'classic', badgeStyle: 'pill', imageFit: 'contain' } },
+  { name: 'Polaroid', note: '9 por página', set: { ...TPL, orientation: 'portrait', layout: 'vertical', cols: 3, rows: 3, cardStyle: 'shadow', cardPad: 3, photoSize: 62, photoShape: 'rounded', photoDeco: false, photoTilt: 3, align: 'center', brandStyle: 'plain', showDivider: false, decoration: 'none', frame: 'none', headerStyle: 'center', badgeStyle: 'seal', imageFit: 'contain', groupByBrand: 'no' } },
+  { name: 'Carta de bar', note: '12 por página', set: { ...TPL, orientation: 'portrait', layout: 'horizontal', cols: 2, rows: 6, cardStyle: 'none', photoSize: 30, photoShape: 'circle', photoDeco: false, textVAlign: 'center', priceStyle: 'big', showDivider: false, decoration: 'none', frame: 'double', headerStyle: 'center', badgeStyle: 'pill', imageFit: 'contain', groupByBrand: 'yes' } },
+  { name: 'Póster', note: '4 por página', set: { ...TPL, orientation: 'portrait', layout: 'vertical', cols: 2, rows: 2, cardStyle: 'solid', cardPad: 4, photoSize: 60, photoShape: 'blob', photoDeco: false, align: 'center', textVAlign: 'center', priceStyle: 'pill', brandStyle: 'pill', showDivider: false, decoration: 'none', frame: 'none', headerStyle: 'band', badgeStyle: 'seal', imageFit: 'contain', groupByBrand: 'no' } },
+  { name: 'Franjas', note: '10 por página', set: { ...TPL, orientation: 'portrait', layout: 'horizontal', cols: 2, rows: 5, cardStyle: 'stripe', photoSize: 36, photoShape: 'rounded', photoDeco: false, photoSide: 'right', decoration: 'none', frame: 'none', headerStyle: 'classic', badgeStyle: 'pill', imageFit: 'contain', groupByBrand: 'no' } }
 ];
 
 const DEFAULTS = {
@@ -91,11 +97,11 @@ const DEFAULTS = {
   titleEffect: 'none', photoBg: 'color', photoShadow: 'none', photoFilter: 'none', photoTilt: 0, photoRing: false,
   pageBgMode: 'solid', pageBg2: '#efe8f7',
   ...PRESETS[0], titleFont: 'system', headingFont: 'system', bodyFont: 'system', fontScale: 100,
-  titleScale: 100, nameScale: 100, nameWeight: '800', nameSpacing: 0, nameColor: 'text',
+  titleScale: 100, nameScale: 100, descScale: 100, nameWeight: '800', nameSpacing: 0, nameColor: 'text',
   ...TEMPLATES[0].set, v3: true
 };
 delete DEFAULTS.name;
-const NUM_KEYS = new Set(['cols', 'rows', 'gap', 'margin', 'photoSize', 'radius', 'fontScale', 'printerMargin', 'decoOpacity', 'bgOpacity', 'titleScale', 'nameScale', 'nameSpacing', 'photoTilt']);
+const NUM_KEYS = new Set(['cols', 'rows', 'gap', 'margin', 'photoSize', 'radius', 'fontScale', 'printerMargin', 'decoOpacity', 'bgOpacity', 'titleScale', 'nameScale', 'nameSpacing', 'photoTilt', 'cardPad', 'descScale']);
 // Claves que no forman parte de un «diseño» guardable (son contenido, no estilo)
 const TEXT_KEYS = ['title', 'subtitle', 'footerText', 'edition', 'logo', 'v3'];
 
@@ -128,6 +134,19 @@ async function tx(store, mode, fn) {
 const getAll = () => tx(STORE, 'readonly', s => s.getAll());
 const put = item => tx(STORE, 'readwrite', s => s.put(item));
 const del = id => tx(STORE, 'readwrite', s => s.delete(id));
+// Varias escrituras en una sola transacción (cambios de varios productos a la vez)
+async function bulkWrite(fn) {
+  const d = await openDB();
+  return new Promise((res, rej) => {
+    const t = d.transaction(STORE, 'readwrite');
+    fn(t.objectStore(STORE));
+    t.oncomplete = () => res();
+    t.onerror = () => rej(t.error);
+    t.onabort = () => rej(t.error);
+  });
+}
+const putMany = items => bulkWrite(s => items.forEach(i => s.put(i)));
+const delMany = ids => bulkWrite(s => ids.forEach(id => s.delete(id)));
 const getMeta = async () => (await tx(META, 'readonly', s => s.get('settings')))?.value || null;
 const saveMeta = () => tx(META, 'readwrite', s => s.put({ key: 'settings', value: S }));
 const getMetaKey = async key => (await tx(META, 'readonly', s => s.get(key)))?.value;
@@ -298,6 +317,8 @@ function syncDesignUI() {
   document.querySelectorAll('.feature-only').forEach(el => el.classList.toggle('hidden', S.layout !== 'feature'));
   document.querySelectorAll('.pg-only').forEach(el => el.classList.toggle('hidden', S.pageBgMode !== 'gradient'));
   document.querySelectorAll('.grid-only').forEach(el => el.classList.toggle('hidden', S.layout === 'feature'));
+  document.querySelectorAll('.horiz-only').forEach(el => el.classList.toggle('hidden', S.layout !== 'horizontal'));
+  document.querySelectorAll('.head-only').forEach(el => el.classList.toggle('hidden', S.header === 'none'));
   if (S.logo) $('logoPreview').src = S.logo; else $('logoPreview').removeAttribute('src');
   if (S.bgImage) $('bgPreview').src = imgUrl(S.bgImage); else $('bgPreview').removeAttribute('src');
 }
@@ -389,6 +410,9 @@ const badgeText = p => S.showBadge ? p.tag || (p.isNew ? S.badgeText || 'Novedad
 const badgeHTML = (text, extra = '') => `<div class="c-badge ${S.badgeStyle}${extra}">${esc(text)}</div>`;
 const tilt = p => S.photoTilt ? `;--tilt:${(numbering.get(p.id) || 0) % 2 ? S.photoTilt : -S.photoTilt}deg` : '';
 const flavorVars = p => { const f = flavorColor(p); return `--f:${f};--f-ink:${inkFor(f)}`; };
+const BORDER = { border: 0.6, accent: 1.2, outline: 1.6, glass: 0.6, double: 2.2, dashed: 0.8 };
+const priceExtra = () => S.priceStyle === 'pill' || S.priceStyle === 'outline' ? 0.8 : 0;
+const brandExtra = () => S.brandStyle === 'pill' ? 0.8 : 0;
 
 function catalogProducts() {
   const list = products.filter(p => !p.hidden);
@@ -432,10 +456,12 @@ function paginate(list, g) {
 function cardHTML(p, g) {
   if (S.layout === 'feature') return featureHTML(p, g);
   const fs = S.fontScale / 100 * g.k, lh = pt => pt * fs * PT;
-  const pad = S.cardStyle === 'none' ? 0 : 2.5;
-  const border = { border: 0.6, accent: 1.2, outline: 1.6, glass: 0.6 }[S.cardStyle] || 0;
-  const inW = g.cardW - 2 * pad, inH = g.cardH - 2 * pad - border;
-  const horiz = S.layout === 'horizontal', photo = S.showPhotos;
+  const pad = S.cardStyle === 'none' ? 0 : S.cardPad;
+  const border = BORDER[S.cardStyle] || 0;
+  const inW = g.cardW - 2 * pad - (S.cardStyle === 'stripe' ? 1.6 : 0), inH = g.cardH - 2 * pad - border;
+  const horiz = S.layout === 'horizontal', photo = S.showPhotos, ds = S.descScale / 100;
+  const n = numbering.get(p.id) || 0;
+  const right = horiz && photo && (S.photoSide === 'right' || (S.photoSide === 'alternate' && n % 2 === 0));
   let phStyle = '', textW = inW, textH = inH;
   if (photo) {
     if (horiz) { const pw = inW * S.photoSize / 100; phStyle = `flex-basis:${mm(pw)};width:${mm(pw)}`; textW = inW - pw - 3; }
@@ -450,14 +476,14 @@ function cardHTML(p, g) {
   const price = S.showPrice && p.price ? esc(formatPrice(p.price)) : '';
   const hasMeta = !!(left || price);
   // Estimación de cuántas líneas de descripción caben para recortarla limpiamente con «…»
-  const brandH = S.showBrand && p.brand ? lh(6.5) * 1.45 : 0;
+  const brandH = S.showBrand && p.brand ? lh(6.5) * 1.45 + brandExtra() : 0;
   const badgeH = badge && !photo ? lh(6) * 1.3 + 2.2 : 0;
   const nameLines = Math.min(2, Math.max(1, Math.ceil(String(p.name || '').length * lh(10.5 * ns) * (S.upperName ? 0.68 : 0.58) / Math.max(textW, 1))));
   const nameH = nameLines * lh(10.5 * ns) * 1.2 + 1.6;
-  const metaH = hasMeta ? lh(9) * 1.25 + 1.6 : 0;
-  const descLines = Math.floor((textH - brandH - badgeH - nameH - metaH - 0.6) / (lh(7.8) * 1.3));
+  const metaH = hasMeta ? lh(price && S.priceStyle === 'big' ? 12 : 9) * 1.25 + 1.6 + (price ? priceExtra() : 0) : 0;
+  const descLines = Math.floor((textH - brandH - badgeH - nameH - metaH - 0.6) / (lh(7.8 * ds) * 1.3));
   const badgeEl = badge ? badgeHTML(badge, photo ? '' : ' in') : '';
-  return `<div class="c-card${horiz ? ' h' : ''}" data-pid="${esc(p.id)}" style="${flavorVars(p)}${tilt(p)}">${photo ? badgeEl : ''}` +
+  return `<div class="c-card${horiz ? ' h' : ''}${right ? ' r' : ''}" data-pid="${esc(p.id)}" style="${flavorVars(p)}${tilt(p)}">${photo ? badgeEl : ''}` +
     (photo ? `<div class="c-ph sh-${S.photoShape}" style="${phStyle}">${p.image ? `<img src="${esc(imgUrl(p.image))}" alt="">` : ''}</div>` : '') +
     `<div class="c-tx">${photo ? '' : badgeEl}` +
     (brandH ? `<div class="c-brand">${esc(p.brand)}</div>` : '') +
@@ -470,9 +496,9 @@ function cardHTML(p, g) {
 // Diseño «Revista»: un sabor por fila, foto grande con formas de color y texto amplio
 function featureHTML(p, g) {
   const fs = S.fontScale / 100, lh = pt => pt * fs * PT;
-  const pad = S.cardStyle === 'none' ? 0 : 4;
-  const border = { border: 0.6, accent: 1.2, outline: 1.6, glass: 0.6 }[S.cardStyle] || 0;
-  const inW = g.cardW - 2 * pad, inH = g.cardH - 2 * pad - border;
+  const pad = S.cardStyle === 'none' ? 0 : S.cardPad + 1.5, ds = S.descScale / 100;
+  const border = BORDER[S.cardStyle] || 0;
+  const inW = g.cardW - 2 * pad - (S.cardStyle === 'stripe' ? 1.6 : 0), inH = g.cardH - 2 * pad - border;
   const n = numbering.get(p.id) || 0, flip = S.alternate && n % 2 === 0;
   const photo = S.showPhotos, phW = photo ? Math.min(inW * S.photoSize / 100, inW * 0.7) : 0;
   const textW = inW - phW - (photo ? 7 : 0);
@@ -480,12 +506,12 @@ function featureHTML(p, g) {
   const left = [S.showFormat && p.format, S.showRefs && p.reference && 'Ref. ' + p.reference].filter(Boolean).map(esc).join(' · ');
   const price = S.showPrice && p.price ? esc(formatPrice(p.price)) : '';
   const hasMeta = !!(left || price);
-  const brandH = S.showBrand && p.brand ? lh(7.5) * 1.5 : 0;
+  const brandH = S.showBrand && p.brand ? lh(7.5) * 1.5 + brandExtra() : 0;
   const badgeH = badge && !photo ? lh(6) * 1.3 + 2.2 : 0;
   const nameLines = Math.min(2, Math.max(1, Math.ceil(String(p.name || '').length * lh(22 * ns) * (S.upperName ? 0.68 : 0.58) / Math.max(textW, 1))));
   const nameH = nameLines * lh(22 * ns) * 1.08 + 3;
-  const metaH = hasMeta ? lh(11) * 1.3 + 5 : 0;
-  const descLines = Math.min(8, Math.floor((inH - brandH - badgeH - nameH - metaH - 1) / (lh(10.5) * 1.4)));
+  const metaH = hasMeta ? lh(price && S.priceStyle === 'big' ? 16 : 11) * 1.3 + 5 : 0;
+  const descLines = Math.min(8, Math.floor((inH - brandH - badgeH - nameH - metaH - 1) / (lh(10.5 * ds) * 1.4)));
   let ph = '';
   if (photo) {
     const round = S.photoShape !== 'rounded', side = round ? Math.min(phW, inH) : 0;
@@ -617,13 +643,14 @@ function renderCatalog() {
   numbering = new Map(list.map((p, i) => [p.id, i + 1]));
   const root = $('pages');
   root.className = `pages st-${S.cardStyle} fit-${S.imageFit} pb-${S.photoBg} nc-${S.nameColor} te-${S.titleEffect} pg-${S.pageBgMode}` +
+    ` pr-${S.priceStyle} br-${S.brandStyle} tv-${S.textVAlign}${S.showDivider ? '' : ' nodiv'}` +
     `${S.photoRing ? ' ring' : ''}${S.upperName ? ' up' : ''}${S.align === 'center' ? ' al-center' : ''}`;
   const vars = {
     '--c-accent': S.accent, '--c-accent-ink': inkFor(S.accent), '--c-text': S.textColor, '--c-page': S.pageBg, '--c-card': S.cardBg, '--c-imgbg': S.imageBg,
     '--c-head': fontStack(S.headingFont), '--c-body': fontStack(S.bodyFont), '--c-title': fontStack(S.titleFont),
     '--c-ts': S.titleScale / 100, '--c-ns': S.nameScale / 100, '--c-nw': S.nameWeight, '--c-nls': S.nameSpacing / 100 + 'em',
     '--c-page2': S.pageBg2, '--c-grad2': shiftHue(S.accent, 0.12),
-    '--c-fs': S.fontScale / 100, '--c-k': g.k, '--c-radius': S.radius + 'mm', '--c-fit': S.imageFit, '--c-align': S.align
+    '--c-fs': S.fontScale / 100, '--c-k': g.k, '--c-radius': S.radius + 'mm', '--c-pad': S.cardPad + 'mm', '--c-ds': S.descScale / 100, '--c-fit': S.imageFit, '--c-align': S.align
   };
   for (const [k, v] of Object.entries(vars)) root.style.setProperty(k, v);
   root.innerHTML = (S.cover ? coverHTML(g, list) : '') + pages.map((items, i) => pageHTML(items, i, pages.length, g)).join('');
@@ -653,12 +680,21 @@ function updateZoom() {
 
 /* ---------- Lista y formulario de productos ---------- */
 
-function renderList() {
+const selected = new Set(); // productos marcados para cambiarlos a la vez
+let curTab = 'catalogo';
+
+function listedProducts() {
   const q = $('search').value.trim().toLowerCase();
-  const list = q ? products.filter(p => [p.brand, p.name, p.reference, p.description].join(' ').toLowerCase().includes(q)) : products;
+  return q ? products.filter(p => [p.brand, p.name, p.reference, p.description, p.tag].join(' ').toLowerCase().includes(q)) : products;
+}
+
+function renderList() {
+  const q = $('search').value.trim();
+  const list = listedProducts();
   $('productList').innerHTML = list.length ? list.map(p => {
-    const i = products.indexOf(p);
-    return `<div class="productrow${p.hidden ? ' off' : ''}" data-id="${esc(p.id)}">` +
+    const i = products.indexOf(p), sel = selected.has(p.id);
+    return `<div class="productrow${p.hidden ? ' off' : ''}${sel ? ' sel' : ''}" data-id="${esc(p.id)}">` +
+      `<input type="checkbox" class="selbox" data-sel ${sel ? 'checked' : ''} aria-label="Seleccionar">` +
       (p.image ? `<img src="${esc(imgUrl(p.image))}" alt="">` : '<div class="noimg"></div>') +
       `<div class="info"><strong><i class="swatch" style="background:${esc(p.color || p.autoColor || S.accent)}"></i>${esc(p.brand)} · ${esc(p.name)}</strong>` +
       `<small>${esc([p.reference || 'Sin referencia', p.format, formatPrice(p.price)].filter(Boolean).join(' · '))}</small>` +
@@ -671,11 +707,92 @@ function renderList() {
   }).join('') : `<p class="hint">${q ? 'Ningún producto coincide con la búsqueda.' : 'Todavía no hay productos.'}</p>`;
   const brands = [...new Set(products.map(p => p.brand).filter(Boolean))].sort(cmp);
   $('brandList').innerHTML = brands.map(b => `<option value="${esc(b)}">`).join('');
+  updateSelUI();
+}
+
+function updateSelUI() {
+  const list = listedProducts(), n = selected.size, inList = list.filter(p => selected.has(p.id)).length;
+  $('selAll').checked = !!list.length && inList === list.length;
+  $('selAll').indeterminate = inList > 0 && inList < list.length;
+  $('selAllLabel').textContent = n ? `${n} seleccionado${n === 1 ? '' : 's'}` : 'Seleccionar todos';
+  $('selCount').textContent = `${n} seleccionado${n === 1 ? '' : 's'}`;
+  const bulk = n > 0 && curTab === 'productos';
+  $('bulkBar').classList.toggle('hidden', !bulk);
+  $('mainActions').classList.toggle('hidden', bulk);
+}
+
+function toggleSelect(id, on = !selected.has(id)) {
+  if (on) selected.add(id); else selected.delete(id);
+  const row = $('productList').querySelector(`[data-id="${CSS.escape(id)}"]`);
+  if (row) { row.classList.toggle('sel', on); row.querySelector('[data-sel]').checked = on; }
+  updateSelUI();
+}
+
+async function bulkAction(act) {
+  if (act === 'clear') { selected.clear(); return renderList(); }
+  const items = products.filter(p => selected.has(p.id));
+  if (!items.length) return;
+  const label = items.length === 1 ? '1 producto' : `${items.length} productos`;
+  let changed = items;
+  switch (act) {
+    case 'show': case 'hide': items.forEach(p => p.hidden = act === 'hide'); break;
+    case 'new': case 'notnew': items.forEach(p => p.isNew = act === 'new'); break;
+    case 'tag': {
+      const t = prompt(`Etiqueta para ${label} (déjala vacía para quitarla):`, items.every(p => p.tag === items[0].tag) ? items[0].tag || '' : '');
+      if (t === null) return;
+      items.forEach(p => p.tag = t.trim());
+      break;
+    }
+    case 'brand': {
+      const b = prompt(`Nueva marca para ${label}:`, items.every(p => p.brand === items[0].brand) ? items[0].brand || '' : '');
+      if (!b || !b.trim()) return;
+      items.forEach(p => p.brand = b.trim());
+      break;
+    }
+    case 'color': {
+      const input = $('bulkColor');
+      input.value = items[0].color || items[0].autoColor || S.accent;
+      input.onchange = async () => { items.forEach(p => p.color = input.value); await putMany(items); render(); toast(`Color aplicado a ${label}`); };
+      input.click();
+      return;
+    }
+    case 'autocolor': items.forEach(p => p.color = ''); break;
+    case 'top': case 'bottom': {
+      const sel = products.filter(p => selected.has(p.id)), rest = products.filter(p => !selected.has(p.id));
+      products = act === 'top' ? [...sel, ...rest] : [...rest, ...sel];
+      products.forEach((p, i) => p.order = i);
+      changed = products;
+      if (S.sort !== 'manual') toast('El orden del catálogo es automático: elige «Orden: Manual» para verlo');
+      break;
+    }
+    case 'del':
+      if (!confirm(`¿Eliminar ${label}? No se puede deshacer.`)) return;
+      await delMany(items.map(p => p.id));
+      selected.clear();
+      await refresh();
+      return toast(`${label[0].toUpperCase() + label.slice(1)} eliminado${items.length === 1 ? '' : 's'}`);
+  }
+  await putMany(changed);
+  products.sort(byOrder);
+  render();
+  if (act !== 'top' && act !== 'bottom' || S.sort === 'manual') toast(`Cambio aplicado a ${label}`);
+}
+
+// Cabecera de la app: se puede ocultar para ganar espacio (se recuerda en este iPad)
+function setAppbar(show) {
+  document.body.classList.toggle('noappbar', !show);
+  $('showAppbar').classList.toggle('hidden', show);
+  try { localStorage.setItem('hideAppbar', show ? '' : '1'); } catch {}
+  updateZoom();
 }
 
 function render() { renderCatalog(); renderList(); }
 
-async function refresh() { products = (await getAll()).sort(byOrder); render(); }
+async function refresh() {
+  products = (await getAll()).sort(byOrder);
+  for (const id of selected) if (!products.some(p => p.id === id)) selected.delete(id);
+  render();
+}
 
 // Garantiza un orden manual único y consecutivo
 async function fixOrder() {
@@ -739,6 +856,8 @@ async function moveProduct(id, dir) {
 function showTab(name) {
   document.querySelectorAll('main section').forEach(s => s.classList.toggle('hidden', s.id !== name));
   document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  curTab = name;
+  updateSelUI();
   if (name === 'catalogo') updateZoom();
 }
 
@@ -751,7 +870,9 @@ async function printCatalog() {
 
 /* ---------- Eventos ---------- */
 
-document.querySelectorAll('.tab').forEach(b => b.onclick = () => showTab(b.dataset.tab));
+document.querySelectorAll('.tab[data-tab]').forEach(b => b.onclick = () => showTab(b.dataset.tab));
+$('hideAppbar').onclick = () => setAppbar(false);
+$('showAppbar').onclick = () => setAppbar(true);
 window.addEventListener('resize', updateZoom);
 
 $('toggleDesign').onclick = () => {
@@ -870,9 +991,21 @@ $('saveProduct').onclick = async () => {
 };
 
 $('search').addEventListener('input', renderList);
+$('selAll').onchange = () => {
+  const on = $('selAll').checked;
+  listedProducts().forEach(p => on ? selected.add(p.id) : selected.delete(p.id));
+  renderList();
+};
+$('bulkBar').onclick = e => { const b = e.target.closest('[data-bulk]'); if (b) bulkAction(b.dataset.bulk); };
 $('productList').onclick = async e => {
+  const box = e.target.closest('[data-sel]');
+  if (box) return toggleSelect(box.closest('[data-id]').dataset.id, box.checked);
   const btn = e.target.closest('[data-act]');
-  if (!btn) return;
+  if (!btn) {
+    const row = e.target.closest('[data-id]');
+    if (row) toggleSelect(row.dataset.id); // tocar la fila la selecciona
+    return;
+  }
   const id = btn.closest('[data-id]').dataset.id, p = products.find(x => x.id === id);
   switch (btn.dataset.act) {
     case 'up': return moveProduct(id, -1);
@@ -941,6 +1074,9 @@ async function init() {
   myDesigns = await getMetaKey('designs') || [];
   customFonts = await getMetaKey('fonts') || [];
   await Promise.all(customFonts.map(f => registerFont(f).catch(() => {})));
+  let hideBar = false;
+  try { hideBar = localStorage.getItem('hideAppbar') === '1'; } catch {}
+  if (hideBar) setAppbar(false);
   buildDesignUI();
   fillSettings();
   $('designPanel').classList.add('closed');
