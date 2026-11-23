@@ -1,6 +1,6 @@
 // Sube la versión al publicar cambios para que el iPad descargue los archivos nuevos
-const CACHE = 'catalogo-cachimba-v9', FONT_CACHE = 'catalogo-fuentes';
-const FILES = ['./', './index.html', './styles.css', './app.js', './seed.js', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
+const CACHE = 'catalogo-cachimba-v10', FONT_CACHE = 'catalogo-fuentes';
+const FILES = ['./', './index.html', './styles.css', './app.js', './seed.js', './manifest.webmanifest', './icon-192.png', './icon-512.png', './vendor/jspdf.umd.min.js', './vendor/modern-screenshot.js'];
 
 self.addEventListener('install', e => e.waitUntil(
   caches.open(CACHE).then(c => c.addAll(FILES.map(f => new Request(f, { cache: 'reload' })))).then(() => self.skipWaiting())
@@ -18,7 +18,8 @@ self.addEventListener('fetch', e => {
   if (/^fonts\.(googleapis|gstatic)\.com$/.test(url.hostname)) {
     e.respondWith(caches.open(FONT_CACHE).then(async cache => {
       const cached = await cache.match(e.request);
-      if (cached) return cached;
+      // Una copia «opaca» (sin CORS) no sirve para incrustar la fuente en el PDF: se vuelve a pedir
+      if (cached && !(cached.type === 'opaque' && e.request.mode === 'cors')) return cached;
       const r = await fetch(e.request);
       if (r.ok || r.type === 'opaque') cache.put(e.request, r.clone());
       return r;

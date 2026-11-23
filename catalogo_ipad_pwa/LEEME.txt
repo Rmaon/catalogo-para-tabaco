@@ -43,7 +43,8 @@ Esta carpeta contiene una PWA. Para instalarla en iPad debe estar servida desde 
 - En «Productos» toca uno o varios productos (o «Seleccionar todos») para cambiarlos a la vez desde la barra inferior: mostrar u ocultar, marcar o quitar novedad, poner etiqueta, cambiar la marca o el color, llevarlos al principio o al final, o eliminarlos.
 - La cabecera oscura de la app se puede quitar con «Ocultar cabecera»; para recuperarla pulsa «Mostrar cabecera de la app» junto a las pestañas.
 - En «Productos» también puedes buscar, reordenar con ↑ ↓ (orden «Manual»), ocultar productos del catálogo sin borrarlos y marcarlos como novedad.
-- Pulsa «Crear PDF»; en la hoja de impresión del iPad usa Compartir → «Guardar en Archivos» para conservar el PDF. Si salen páginas cortadas o en blanco, sube «Margen de impresora» en el apartado Impresión.
+- Pulsa «Descargar PDF»: el PDF se crea directamente, una página por hoja, sin pasar por el cuadro de impresión. En el iPad aparece «Guardar o compartir» → «Guardar en Archivos»; en el Mac se descarga en Descargas.
+- «Imprimir» sigue disponible para mandarlo a una impresora. Si al imprimir salen páginas cortadas o en blanco, sube «Margen de impresora» en el apartado Impresión.
 - Al publicar una versión nueva, cambia el número de `CACHE` en `sw.js` para que el iPad descargue los archivos actualizados (se aplican al abrir la app por segunda vez).
 
 ## Importante

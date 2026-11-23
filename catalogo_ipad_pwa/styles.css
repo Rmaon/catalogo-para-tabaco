@@ -246,11 +246,16 @@ button:disabled{opacity:.35}
 .toast{position:fixed;left:50%;bottom:calc(84px + var(--safe));transform:translateX(-50%);background:#241d30;color:#fff;padding:10px 16px;border-radius:12px;z-index:9;opacity:0;transition:opacity .2s;pointer-events:none;font-weight:600}.toast.show{opacity:1}
 
 @media(min-width:700px){main{padding:22px}}
+.pdf-modal{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(36,29,48,.55)}
+.pdf-box{width:100%;max-width:380px;background:white;color:var(--ink);border-radius:16px;padding:22px;box-shadow:0 10px 40px rgba(0,0,0,.25);text-align:center}
+.pdf-box h3{margin:0 0 6px}.pdf-box p{margin:0;color:var(--muted)}
+.pdf-bar{height:8px;margin:16px 0 4px;border-radius:4px;background:var(--line);overflow:hidden}.pdf-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+.pdf-box .actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px}.pdf-box .actions:empty{display:none}
 @media(max-width:560px){.productrow{flex-wrap:wrap}.productrow .btns{width:100%;justify-content:flex-end}.listhead input{max-width:160px}.grid3{grid-template-columns:1fr 1fr}.checks{grid-template-columns:1fr}}
 
 @media print{
   body{background:white;padding:0}
-  .appbar,.tabs,.bottom,.toast,.toolbar,#designPanel,#productos,#datos{display:none!important}
+  .appbar,.tabs,.bottom,.toast,.pdf-modal,.toolbar,#designPanel,#productos,#datos{display:none!important}
   main{padding:0;max-width:none}
   #catalogo{display:block!important}
   .catalog-layout{display:block}

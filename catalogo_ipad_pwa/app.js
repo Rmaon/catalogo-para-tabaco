@@ -333,12 +333,15 @@ function buildFontSelects() {
 }
 
 // Carga solo las Google Fonts que se están usando
-function loadGoogleFonts() {
+function googleFontsHref() {
   const used = [...new Set([S.titleFont, S.headingFont, S.bodyFont])].filter(k => GFONTS[k]);
+  return used.length ? 'https://fonts.googleapis.com/css2?' + used.map(k => 'family=' + GFONTS[k][1].replace(/ /g, '+')).join('&') + '&display=swap' : '';
+}
+function loadGoogleFonts() {
+  const href = googleFontsHref();
   let link = $('gfonts');
-  if (!used.length) { link?.remove(); return; }
-  const href = 'https://fonts.googleapis.com/css2?' + used.map(k => 'family=' + GFONTS[k][1].replace(/ /g, '+')).join('&') + '&display=swap';
-  if (!link) { link = document.createElement('link'); link.id = 'gfonts'; link.rel = 'stylesheet'; document.head.append(link); }
+  if (!href) { link?.remove(); return; }
+  if (!link) { link = document.createElement('link'); link.id = 'gfonts'; link.rel = 'stylesheet'; link.crossOrigin = 'anonymous'; document.head.append(link); }
   if (link.getAttribute('href') !== href) link.href = href;
 }
 
@@ -387,11 +390,13 @@ function buildDesignUI() {
    Todo se calcula en milímetros: cada página tiene el tamaño exacto del papel y
    se reparten filas completas de tarjetas, de modo que ninguna se corta al imprimir. */
 
+let pdfMode = false;
 function geometry() {
   let [w, h] = PAPER[S.paper] || PAPER.A4;
   if (S.orientation === 'landscape') [w, h] = [h, w];
-  const pm = S.printerMargin, pad = Math.max(S.margin - pm, 0);
-  const pw = w - 2 * pm, ph = h - 2 * pm - 0.5; // 0,5 mm de holgura evita páginas en blanco por redondeo
+  // En la exportación directa a PDF no hay impresora: la página ocupa el papel entero, sin holgura
+  const pm = pdfMode ? 0 : S.printerMargin, pad = Math.max(S.margin - pm, 0);
+  const pw = w - 2 * pm, ph = h - 2 * pm - (pdfMode ? 0 : 0.5); // 0,5 mm de holgura evita páginas en blanco por redondeo
   const iw = pw - 2 * pad, ih = ph - 2 * pad;
   const foot = S.pageNumbers || S.footerText ? FOOT : 0;
   const head = i => S.header === 'none' ? 0 : i === 0 ? HEAD_FULL : S.header === 'all' ? HEAD_RUN : 0;
@@ -915,6 +920,147 @@ async function printCatalog() {
   setTimeout(() => window.print(), 150);
 }
 
+/* ---------- Descarga directa en PDF ----------
+   Cada página de la vista previa se fotografía a alta resolución (modern-screenshot,
+   que usa el propio motor del navegador, así que respeta todos los efectos CSS) y se
+   monta en un PDF con jsPDF, una imagen por página. Sin cuadro de impresión. */
+
+const loadScript = src => new Promise((ok, ko) => {
+  if (document.querySelector(`script[src="${src}"]`)) return ok();
+  const s = document.createElement('script');
+  s.src = src; s.onload = ok; s.onerror = () => ko(new Error('No se pudo cargar ' + src));
+  document.head.append(s);
+});
+
+const blobToDataUrl = b => new Promise((ok, ko) => { const r = new FileReader(); r.onload = () => ok(r.result); r.onerror = ko; r.readAsDataURL(b); });
+
+// Las fuentes deben ir incrustadas dentro de cada captura; las del iPad ya están en el sistema
+async function pdfFontCSS() {
+  const used = new Set([S.titleFont, S.headingFont, S.bodyFont]);
+  let css = customFonts.filter(f => used.has('cf:' + f.id)).map(f => `@font-face{font-family:"CF-${f.id}";src:url(${f.data})}`).join('\n');
+  const href = googleFontsHref();
+  if (!href) return css;
+  try {
+    const text = await (await fetch(href, { mode: 'cors' })).text();
+    // Solo los bloques de alfabeto latino (acentos, ñ…), para no inflar el PDF
+    const blocks = text.split(/(?=\/\*)/).filter(b => /\/\*\s*latin(-ext)?\s*\*\//.test(b) || !b.startsWith('/*'));
+    for (let b of blocks) {
+      for (const [, url] of b.matchAll(/url\((https:[^)]+)\)/g)) {
+        const data = await blobToDataUrl(await (await fetch(url, { mode: 'cors' })).blob());
+        b = b.replace(url, data);
+      }
+      css += '\n' + b;
+    }
+  } catch (e) {
+    console.warn('Fuentes de Google no disponibles para el PDF', e);
+    toast('Sin conexión: alguna tipografía de Google puede salir distinta');
+  }
+  return css;
+}
+
+const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+function pdfDialog() {
+  let m = document.querySelector('.pdf-modal');
+  if (!m) {
+    m = document.createElement('div');
+    m.className = 'pdf-modal';
+    m.innerHTML = '<div class="pdf-box" role="dialog" aria-live="polite"><h3></h3><p></p><div class="pdf-bar"><i></i></div><div class="actions"></div></div>';
+    document.body.append(m);
+  }
+  const box = m.firstChild;
+  return {
+    set(title, text, frac) {
+      box.querySelector('h3').textContent = title;
+      box.querySelector('p').textContent = text;
+      box.querySelector('.pdf-bar').hidden = frac == null;
+      if (frac != null) box.querySelector('.pdf-bar i').style.width = Math.round(frac * 100) + '%';
+    },
+    buttons(list) {
+      const wrap = box.querySelector('.actions');
+      wrap.innerHTML = '';
+      for (const [label, cls, fn] of list) {
+        const b = document.createElement('button');
+        b.textContent = label; if (cls) b.className = cls; b.onclick = fn;
+        wrap.append(b);
+      }
+    },
+    close() { m.remove(); }
+  };
+}
+
+async function deliverPdf(blob, name, dlg) {
+  const file = new File([blob], name, { type: 'application/pdf' });
+  // En el iPad, «Compartir» permite Guardar en Archivos, AirDrop, WhatsApp…
+  if (isIOS() && navigator.canShare?.({ files: [file] })) {
+    try { await navigator.share({ files: [file], title: name }); dlg.close(); return; }
+    catch (e) { if (e.name === 'AbortError') return; }
+  }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
+  dlg.close();
+  toast('PDF descargado');
+}
+
+let pdfBusy = false;
+async function downloadPdf() {
+  if (pdfBusy) return;
+  pdfBusy = true;
+  const dlg = pdfDialog();
+  dlg.buttons([]);
+  dlg.set('Creando el PDF…', 'Preparando las páginas', 0);
+  const root = $('pages');
+  try {
+    showTab('catalogo');
+    await Promise.all([loadScript('vendor/jspdf.umd.min.js'), loadScript('vendor/modern-screenshot.js')]);
+    pdfMode = true;
+    renderCatalog();
+    root.style.setProperty('--zoom', '1');
+    await document.fonts.ready.catch(() => {});
+    const imgs = [...root.querySelectorAll('img')];
+    await Promise.all(imgs.map(i => i.decode?.().catch(() => {})));
+    const fontCSS = await pdfFontCSS();
+
+    const g = geometry(), pages = [...root.querySelectorAll('.page')];
+    const pxW = g.w * 96 / 25.4, pxH = g.h * 96 / 25.4;
+    // ~240 ppp, sin pasar del límite de memoria de lienzo del iPad
+    const scale = Math.min(2.5, Math.sqrt(14e6 / (pxW * pxH)));
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: [g.w, g.h], orientation: g.w > g.h ? 'l' : 'p', compress: true });
+    for (let i = 0; i < pages.length; i++) {
+      dlg.set('Creando el PDF…', `Página ${i + 1} de ${pages.length}`, i / pages.length);
+      const canvas = await modernScreenshot.domToCanvas(pages[i], {
+        scale, width: pxW, height: pxH,
+        style: { zoom: '1', boxShadow: 'none', margin: '0', outline: 'none' },
+        font: fontCSS ? { cssText: fontCSS } : false,
+        timeout: 30000
+      });
+      if (i) doc.addPage([g.w, g.h], g.w > g.h ? 'l' : 'p');
+      doc.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, g.w, g.h, undefined, 'FAST');
+      canvas.width = canvas.height = 0; // libera memoria cuanto antes (importante en el iPad)
+    }
+    const blob = doc.output('blob');
+    const name = (S.title || 'catalogo').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase() + '.pdf';
+    const mb = (blob.size / 1048576).toFixed(1).replace('.', ',');
+    dlg.set('PDF listo', `${pages.length} página${pages.length === 1 ? '' : 's'} · ${mb} MB`, null);
+    dlg.buttons([
+      [isIOS() ? 'Guardar o compartir' : 'Descargar PDF', '', () => deliverPdf(blob, name, dlg)],
+      ['Cerrar', 'ghost', () => dlg.close()]
+    ]);
+  } catch (e) {
+    console.error(e);
+    dlg.set('No se pudo crear el PDF', e.message || String(e), null);
+    dlg.buttons([['Usar «Imprimir»', 'secondary', () => { dlg.close(); printCatalog(); }], ['Cerrar', 'ghost', () => dlg.close()]]);
+  } finally {
+    pdfMode = false;
+    pdfBusy = false;
+    renderCatalog();
+  }
+}
+
 /* ---------- Eventos ---------- */
 
 document.querySelectorAll('.tab[data-tab]').forEach(b => b.onclick = () => showTab(b.dataset.tab));
@@ -1082,7 +1228,8 @@ $('productList').onclick = async e => {
   }
 };
 
-$('print').onclick = $('quickPdf').onclick = printCatalog;
+$('print').onclick = printCatalog;
+$('pdf').onclick = $('quickPdf').onclick = downloadPdf;
 $('quickAdd').onclick = () => { clearForm(); showTab('productos'); $('brand').focus(); };
 
 $('export').onclick = () => {
